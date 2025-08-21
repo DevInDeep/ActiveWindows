@@ -18,14 +18,21 @@ namespace ActiveWindows.Win32
             {
                 if (hWnd == shellWindow) return true;
                 if (!IsWindowVisible(hWnd)) return true;
+                if (IsIconic(hWnd)) return true;
 
                 int length = GetWindowTextLength(hWnd);
                 if (length == 0) return true;
 
+                Rect currentWindowRect = new Rect();
+                GetWindowRect(hWnd, ref currentWindowRect);
+
                 StringBuilder builder = new StringBuilder(length);
                 GetWindowText(hWnd, builder, length + 1);
 
-                windows[hWnd] = builder.ToString();
+                string screenName = builder.ToString();
+                windows[hWnd] = screenName;
+
+
                 return true;
 
             }, 0);
@@ -45,9 +52,22 @@ namespace ActiveWindows.Win32
         private static extern int GetWindowTextLength(HWND hWnd);
 
         [DllImport("USER32.DLL")]
-        private static extern bool IsWindowVisible(HWND hWnd);
+        public static extern bool IsWindowVisible(HWND hWnd);
 
         [DllImport("USER32.DLL")]
         private static extern IntPtr GetShellWindow();
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
+        [DllImport ("user32.dll")]
+        public static extern bool IsIconic(IntPtr hWnd);
+
+    }
+
+    public struct Rect
+    {
+        public int Left { get; set; }
+        public int Top { get; set; }
+        public int Right { get; set; }
+        public int Bottom { get; set; }
     }
 }
