@@ -14,14 +14,24 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button
-            Width="170"
-            Height="35"
-            Margin="5"
-            Click="DisplayOpenWindows"
-            Content="Get Open Windows"
-            FontFamily="Segoe UI"
-            FontSize="16" />
+        <StackPanel
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                Width="170"
+                Height="35"
+                Margin="5"
+                Click="DisplayOpenWindows"
+                Content="Get Open Windows"
+                FontFamily="Segoe UI"
+                FontSize="16" />
+            <CheckBox
+                Margin="10"
+                VerticalAlignment="Center"
+                Content="Filter Windows Applications" />
+        </StackPanel>
+
         <ListBox x:Name="lstOpenWindows" Grid.Row="1" />
     </Grid>
 </Window>
