@@ -30,7 +30,9 @@
                 x:Name="chkFilter"
                 Margin="10"
                 VerticalAlignment="Center"
-                Content="Filter Windows Applications" />
+                Checked="UseWindowsFilter"
+                Content="Filter Windows Applications"
+                Unchecked="GetAllWindows" />
         </StackPanel>
         <ListBox x:Name="lstOpenWindows" Grid.Row="1" />
     </Grid>

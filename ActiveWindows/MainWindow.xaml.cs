@@ -1,5 +1,6 @@
-﻿using ActiveWindows.Win32;
-using System.Windows;
+﻿using System.Windows;
+using ActiveWindows.Win32;
+using ActiveWindows.Common.Extensions;
 
 namespace ActiveWindows
 {
@@ -8,22 +9,22 @@ namespace ActiveWindows
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow() => InitializeComponent();
-
-        private void DisplayOpenWindows(object sender, RoutedEventArgs e)
+        private readonly WindowManager windowManager = new WindowManager();
+        private Func<WindowInformation[]> filter;
+        public MainWindow()
         {
-            lstOpenWindows.Items.Clear();
-            
-            foreach (KeyValuePair<IntPtr, string> window in OpenWindowGetter.GetOpenWindows())
-            {
-                IntPtr handle = window.Key;
-                string title = window.Value;
-                WindowInformation windowInformation = WindowList.winInfoGet(handle);
-                if (windowInformation.Process.MainModule.FileName.Contains("WINDOWS")) continue;
-                if (windowInformation.Class.Contains("Windows.UI")) continue;
-                lstOpenWindows.Items.Add($"{handle}: {title}");
-            }
-            
+            InitializeComponent();
+            filter = () => windowManager.GetAllWindows();
         }
+        private void DisplayOpenWindows(object sender, RoutedEventArgs e) => 
+            lstOpenWindows.ClearWindows().AddWindows(filter());
+
+        private void UseWindowsFilter(object sender, RoutedEventArgs e) =>
+            filter = () => windowManager.GetAllWindows(info => 
+            !info.Process.MainModule.FileName.Contains("WINDOWS") &&
+            !info.Class.Contains("Windows.UI"));
+
+        private void GetAllWindows(object sender, RoutedEventArgs e) =>
+            filter = () => windowManager.GetAllWindows();
     }
 }

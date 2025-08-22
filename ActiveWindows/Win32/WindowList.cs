@@ -313,7 +313,7 @@ namespace ActiveWindows.Win32
         /// <summary>
         /// The window caption.
         /// </summary>
-        public string Caption = string.Empty;
+        public string Caption { get; set; } = string.Empty;
 
         /// <summary>
         /// The window class.
