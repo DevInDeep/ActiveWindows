@@ -27,11 +27,11 @@
                 FontFamily="Segoe UI"
                 FontSize="16" />
             <CheckBox
+                x:Name="chkFilter"
                 Margin="10"
                 VerticalAlignment="Center"
                 Content="Filter Windows Applications" />
         </StackPanel>
-
         <ListBox x:Name="lstOpenWindows" Grid.Row="1" />
     </Grid>
 </Window>
