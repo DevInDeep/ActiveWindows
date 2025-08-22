@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using ActiveWindows.Common.Extensions;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -198,7 +199,7 @@ namespace ActiveWindows.Win32
         }
 
         /// <summary>
-        /// Called by GetAllWindows.
+        /// Called by UseNoFilter.
         /// </summary>
         /// <param name="parent">The handle of the desktop window.</param>
         /// <returns>List of window handles.</returns>
@@ -444,5 +445,8 @@ namespace ActiveWindows.Win32
         }
 
         #endregion
+
+        public bool IsWindowsUI => Class.Contains("Windows.UI");
+        public bool IsOsWindow => Process.ProcessIsStartedFromWindowsDirectory() || IsWindowsUI;
     }
 }

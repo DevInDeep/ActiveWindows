@@ -11,20 +11,17 @@ namespace ActiveWindows
     {
         private readonly WindowManager windowManager = new WindowManager();
         private Func<WindowInformation[]> filter;
-        public MainWindow()
-        {
-            InitializeComponent();
-            filter = () => windowManager.GetAllWindows();
-        }
+        public MainWindow() => InitializeComponent();
+
+        private void WindowLoaded(object sender, RoutedEventArgs e) => UseNoFilter(sender, e);
+
         private void DisplayOpenWindows(object sender, RoutedEventArgs e) => 
             lstOpenWindows.ClearWindows().AddWindows(filter());
 
         private void UseWindowsFilter(object sender, RoutedEventArgs e) =>
-            filter = () => windowManager.GetAllWindows(info => 
-            !info.Process.MainModule.FileName.Contains("WINDOWS") &&
-            !info.Class.Contains("Windows.UI"));
+            filter = () => windowManager.GetAllWindows(info => !info.IsOsWindow);
 
-        private void GetAllWindows(object sender, RoutedEventArgs e) =>
+        private void UseNoFilter(object sender, RoutedEventArgs e) =>
             filter = () => windowManager.GetAllWindows();
     }
 }

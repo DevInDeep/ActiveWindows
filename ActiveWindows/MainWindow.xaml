@@ -8,6 +8,7 @@
     Title="MainWindow"
     Width="800"
     Height="450"
+    Loaded="WindowLoaded"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -32,7 +33,7 @@
                 VerticalAlignment="Center"
                 Checked="UseWindowsFilter"
                 Content="Filter Windows Applications"
-                Unchecked="GetAllWindows" />
+                Unchecked="UseNoFilter" />
         </StackPanel>
         <ListBox x:Name="lstOpenWindows" Grid.Row="1" />
     </Grid>

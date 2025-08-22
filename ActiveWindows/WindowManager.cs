@@ -13,9 +13,6 @@ namespace ActiveWindows
                 string title = window.Value;
                 WindowInformation windowInformation = WindowList.winInfoGet(handle);
                 windows.Add(windowInformation);
-                //if (windowInformation.Process.MainModule.FileName.Contains("WINDOWS")) continue;
-                //if (windowInformation.Class.Contains("Windows.UI")) continue;
-                //lstOpenWindows.Items.Add($"{handle}: {title}");
             }
             return windows.ToArray();
         }
