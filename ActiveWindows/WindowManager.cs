@@ -4,8 +4,10 @@ namespace ActiveWindows
 {
     internal class WindowManager
     {
-        internal WindowInformation2[] GetAllWindows()
+        internal WindowInformation[] GetAllWindows()
         {
+            return WindowsApi.GetOpenWindows();
+            /*
             List<WindowInformation2> windows = new List<WindowInformation2>();
             foreach (KeyValuePair<IntPtr, string> window in OpenWindowGetter.GetOpenWindows())
             {
@@ -15,9 +17,10 @@ namespace ActiveWindows
                 windows.Add(windowInformation);
             }
             return windows.ToArray();
+            */
         }
 
-        internal WindowInformation2[] GetAllWindows(Func<WindowInformation2, bool> filter) => 
+        internal WindowInformation[] GetAllWindows(Func<WindowInformation, bool> filter) => 
             GetAllWindows().Where(filter).ToArray();
     }
 }

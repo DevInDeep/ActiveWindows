@@ -9,8 +9,7 @@ namespace ActiveWindows
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly WindowManager windowManager = new WindowManager();
-        private Func<WindowInformation2[]> filter;
+        private Func<WindowInformation[]> filter;
         public MainWindow() => InitializeComponent();
 
         private void WindowLoaded(object sender, RoutedEventArgs e) => UseNoFilter(sender, e);
@@ -19,9 +18,11 @@ namespace ActiveWindows
             lstOpenWindows.ClearWindows().AddWindows(filter());
 
         private void UseWindowsFilter(object sender, RoutedEventArgs e) =>
-            filter = () => windowManager.GetAllWindows(info => !info.IsOsWindow);
+            filter = () => WindowsApi.GetOpenWindows().Where(IsNotOsWindow).ToArray();
+
+        private bool IsNotOsWindow(WindowInformation windowInformation) => !windowInformation.IsOsWindow;
 
         private void UseNoFilter(object sender, RoutedEventArgs e) =>
-            filter = () => windowManager.GetAllWindows();
+            filter = () => WindowsApi.GetOpenWindows();
     }
 }

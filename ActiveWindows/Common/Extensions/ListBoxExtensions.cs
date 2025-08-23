@@ -11,7 +11,7 @@ namespace ActiveWindows.Common.Extensions
             return listBox;
         }
 
-        internal static void AddWindows(this ListBox listBox, params WindowInformation2[] windowInfos)
+        internal static void AddWindows(this ListBox listBox, params WindowInformation[] windowInfos)
         {
             listBox.ItemsSource = windowInfos;
             listBox.DisplayMemberPath = "Caption";
