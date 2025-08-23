@@ -10,7 +10,7 @@ namespace ActiveWindows
     public partial class MainWindow : Window
     {
         private readonly WindowManager windowManager = new WindowManager();
-        private Func<WindowInformation[]> filter;
+        private Func<WindowInformation2[]> filter;
         public MainWindow() => InitializeComponent();
 
         private void WindowLoaded(object sender, RoutedEventArgs e) => UseNoFilter(sender, e);

@@ -14,11 +14,11 @@ namespace ActiveWindows.Win32
         /// Gets all windows with basic information: caption, class and handle.
         /// The list starts with the desktop.
         /// </summary>
-        /// <returns>WindowInformation list</returns>
-        public static List<WindowInformation> GetAllWindows()
+        /// <returns>WindowInformation2 list</returns>
+        public static List<WindowInformation2> GetAllWindows()
         {
             IntPtr desktopWindow = GetDesktopWindow();
-            List<WindowInformation> winInfo = new List<WindowInformation>();
+            List<WindowInformation2> winInfo = new List<WindowInformation2>();
             winInfo.Add(winInfoGet(desktopWindow));
             List<IntPtr> handles = getChildWindows(desktopWindow);
             foreach (IntPtr handle in handles)
@@ -37,7 +37,7 @@ namespace ActiveWindows.Win32
         /// parent, children, and siblings. The list starts with the desktop.
         /// </summary>
         /// <returns>WindowInformationList</returns>
-        public static List<WindowInformation> GetAllWindowsExtendedInfo()
+        public static List<WindowInformation2> GetAllWindowsExtendedInfo()
         {
             return winInfoExtendedInfoProcess(GetAllWindowsTree());
         }
@@ -47,10 +47,10 @@ namespace ActiveWindows.Win32
         /// Includes the extended information: caption, class, handle, parent,
         /// children, and siblings. The list starts with the desktop.
         /// </summary>
-        /// <returns>Desktop WindowInformation object with nested children</returns>
-        public static WindowInformation GetAllWindowsTree()
+        /// <returns>Desktop WindowInformation2 object with nested children</returns>
+        public static WindowInformation2 GetAllWindowsTree()
         {
-            WindowInformation desktopWindow = winInfoGet(GetDesktopWindow());
+            WindowInformation2 desktopWindow = winInfoGet(GetDesktopWindow());
             desktopWindow.ChildWindows = getChildWindowsInfo(desktopWindow);
             return desktopWindow;
         }
@@ -221,24 +221,24 @@ namespace ActiveWindows.Win32
         }
 
         /// <summary>
-        /// Called by GeAlltWindowsTree and builds the nested WindowInformation
+        /// Called by GeAlltWindowsTree and builds the nested WindowInformation2
         /// object with extended window information. Recursive function.
         /// </summary>
         /// <param name="parent">The parent window.</param>
-        /// <returns>List of WindowInformation objects.</returns>
-        private static List<WindowInformation> getChildWindowsInfo(WindowInformation parent)
+        /// <returns>List of WindowInformation2 objects.</returns>
+        private static List<WindowInformation2> getChildWindowsInfo(WindowInformation2 parent)
         {
-            List<WindowInformation> result = new List<WindowInformation>();
+            List<WindowInformation2> result = new List<WindowInformation2>();
             IntPtr childHwnd = GetWindow(parent.Handle, GetWindow_Cmd.GW_CHILD);
             while (childHwnd != IntPtr.Zero)
             {
-                WindowInformation child = winInfoGet(childHwnd);
+                WindowInformation2 child = winInfoGet(childHwnd);
                 child.Parent = parent;
                 child.ChildWindows = getChildWindowsInfo(child);
                 result.Add(child);
                 childHwnd = FindWindowEx(parent.Handle, childHwnd, null, null);
             }
-            foreach (WindowInformation child in result)
+            foreach (WindowInformation2 child in result)
             {
                 child.SiblingWindows.AddRange(result);
                 child.SiblingWindows.Remove(child);
@@ -247,16 +247,16 @@ namespace ActiveWindows.Win32
         }
 
         /// <summary>
-        /// Called by GetAllWindowsExtededInfo. Flattens the nested WindowInformation
+        /// Called by GetAllWindowsExtededInfo. Flattens the nested WindowInformation2
         /// object built by GetAllWindowsTree.
         /// </summary>
-        /// <param name="winInfo">The nested WindowInformation object created by GetAllWindowsTree.</param>
-        /// <returns>Flattened list of WindowInformation objects with extended information.</returns>
-        private static List<WindowInformation> winInfoExtendedInfoProcess(WindowInformation winInfo)
+        /// <param name="winInfo">The nested WindowInformation2 object created by GetAllWindowsTree.</param>
+        /// <returns>Flattened list of WindowInformation2 objects with extended information.</returns>
+        private static List<WindowInformation2> winInfoExtendedInfoProcess(WindowInformation2 winInfo)
         {
-            List<WindowInformation> winInfoList = new List<WindowInformation>();
+            List<WindowInformation2> winInfoList = new List<WindowInformation2>();
             winInfoList.Add(winInfo);
-            foreach (WindowInformation child in winInfo.ChildWindows)
+            foreach (WindowInformation2 child in winInfo.ChildWindows)
             {
                 winInfoList.AddRange(winInfoExtendedInfoProcess(child));
             }
@@ -267,14 +267,14 @@ namespace ActiveWindows.Win32
         /// Gets the basic window information from a handle.
         /// </summary>
         /// <param name="hWnd">Window handle.</param>
-        /// <returns>WindowInformation object with basic information.</returns>
-        public static WindowInformation winInfoGet(IntPtr hWnd)
+        /// <returns>WindowInformation2 object with basic information.</returns>
+        public static WindowInformation2 winInfoGet(IntPtr hWnd)
         {
             StringBuilder caption = new StringBuilder(1024);
             StringBuilder className = new StringBuilder(1024);
             GetWindowText(hWnd, caption, caption.Capacity);
             GetClassName(hWnd, className, className.Capacity);
-            WindowInformation wi = new WindowInformation();
+            WindowInformation2 wi = new WindowInformation2();
             wi.Handle = hWnd;
             wi.Class = className.ToString();
             if (caption.ToString() != string.Empty)
@@ -297,7 +297,7 @@ namespace ActiveWindows.Win32
     /// <summary>
     /// Object that holds window specific information.
     /// </summary>
-    public class WindowInformation
+    public class WindowInformation2
     {
 
         #region Constructor
@@ -305,7 +305,7 @@ namespace ActiveWindows.Win32
         /// <summary>
         /// Initialize the class.
         /// </summary>
-        public WindowInformation() { }
+        public WindowInformation2() { }
 
         #endregion
 
@@ -324,7 +324,7 @@ namespace ActiveWindows.Win32
         /// <summary>
         /// Children of the window.
         /// </summary>
-        public List<WindowInformation> ChildWindows = new List<WindowInformation>();
+        public List<WindowInformation2> ChildWindows = new List<WindowInformation2>();
 
         /// <summary>
         /// Unmanaged code to get the process and thres IDs of the window.
@@ -372,7 +372,7 @@ namespace ActiveWindows.Win32
         /// <summary>
         /// The parent window.
         /// </summary>
-        public WindowInformation Parent { get; set; }
+        public WindowInformation2 Parent { get; set; }
 
         /// <summary>
         /// The handle of the parent of the window.
@@ -406,7 +406,7 @@ namespace ActiveWindows.Win32
         /// <summary>
         /// Sibling window information.
         /// </summary>
-        public List<WindowInformation> SiblingWindows = new List<WindowInformation>();
+        public List<WindowInformation2> SiblingWindows = new List<WindowInformation2>();
 
         /// <summary>
         /// The handles of the sibling windows.
