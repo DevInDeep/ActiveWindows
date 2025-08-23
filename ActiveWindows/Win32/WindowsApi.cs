@@ -1,9 +1,7 @@
-﻿using ActiveWindows.Common.Extensions;
+﻿using System.Text;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Security.Claims;
-using System.Text;
 using HWND = System.IntPtr;
+using System.Runtime.InteropServices;
 
 namespace ActiveWindows.Win32
 {
@@ -24,7 +22,7 @@ namespace ActiveWindows.Win32
 
                 Rect currentWindowRect = new Rect();
                 GetWindowRect(hWnd, ref currentWindowRect);
-
+                
                 StringBuilder captionBuilder = new StringBuilder(length);
                 GetWindowText(hWnd, captionBuilder, length + 1);
                 StringBuilder classNameBuilder = new StringBuilder(1024);
@@ -37,6 +35,7 @@ namespace ActiveWindows.Win32
                     {
                         Caption = captionBuilder.ToString(),
                         ClassName = classNameBuilder.ToString(),
+                        WindowRect = currentWindowRect,
                         Process = process
                     };
                     windowInformationList.Add(windowInformation);
@@ -75,14 +74,5 @@ namespace ActiveWindows.Win32
         private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
         [DllImport("user32")]
         private static extern int GetWindowThreadProcessId(IntPtr hWnd, out int processId);
-    }
-
-    public class WindowInformation
-    {
-        public string Caption { get; set; } = string.Empty;
-        public string ClassName { get; set; } = string.Empty;
-        public Process Process { get; set; } = null;
-        public bool IsWindowsUI => ClassName.Contains("Windows.UI");
-        public bool IsOsWindow => Process.ProcessIsStartedFromWindowsDirectory() || IsWindowsUI;
     }
 }
