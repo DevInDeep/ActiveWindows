@@ -30,7 +30,6 @@ namespace ActiveWindows.Win32
 
                 if (GetProcess(hWnd, out Process process))
                 {
-
                     WindowInformation windowInformation = new WindowInformation()
                     {
                         Caption = captionBuilder.ToString(),
