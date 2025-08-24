@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Windows;
+using System.Diagnostics;
 using ActiveWindows.Common.Extensions;
 
 namespace ActiveWindows.Win32

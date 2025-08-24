@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Win32\Rect.cs" />
     <Compile Remove="Win32\WindowList.cs" />
   </ItemGroup>
 
